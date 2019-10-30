@@ -1,0 +1,115 @@
+Docker {
+  commands {
+    docker run --name database -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
+    docker ps
+    docker ps -a
+    docker start <nome>
+    docker stop <nome>
+    docker logs <nome>
+  }
+}
+
+Eslint {
+  .eslintrc.js {
+    rules: {
+        "class-methods-use-this": "off",
+        "no-param'reassign": "off",
+        "camelcase": "off",
+        "no-unused-vars": ["error", { "argsIgnorePattern": "next" }]
+    }
+  }
+
+  settings.json {
+    "eslint.autoFixOnSave": true,
+    "eslint.validate": [
+        {
+            "language": "javascript",
+            "autoFix": true
+        },
+        {
+            "language": "javascriptreact",
+            "autoFix": true
+        },
+        {
+            "language": "typescript",
+            "autoFix": true
+        },
+        {
+            "language": "javascriptreact",
+            "autoFix": true
+        },
+    ]
+  }
+}
+
+Prettier {
+  yarn add prettier eslint-config-prettier eslint-plugin-prettier -D
+  // padroniza todo o código
+  yarn eslint --fix src --ext .js
+
+  .eslintrc.js
+    extends: ['airbnb-base', 'prettier'],
+    plugins: ['prettier'],
+
+    rules: { "prettier/prettier": "error" }
+
+  .prettierrc
+    {
+      "singleQuote": true,
+      "trailingComma": "es5"
+    }
+
+Editorconfig
+
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+}
+
+Sequelize {
+  commands {
+    yarn add sequelize
+    yarn add sequelize-cli -D
+  }
+
+  .sequelizerc{
+    //padronização do caminho da pasta e arquivo entre os SOs
+    const { resolve } = require('path');
+
+    module.exports = {
+      config: resolve(__dirname, 'src', 'config', 'database.js'),
+      'models-path': resolve(__dirname, 'src', 'app', 'models'),
+      'migrations-path': resolve(__dirname, 'src', 'database', 'migrations'),
+      'seeders-path': resolve(__dirname, 'src', 'database', 'seeds'),
+    }
+
+  }
+
+  config/database.js
+
+  module.exports = {
+    dialect: 'postgres',
+    host: 'localhost',
+    username: 'postgres',
+    password: 'docker',
+    database: 'postgres',
+    define: {
+      timestamp: true,
+      underscored: true,
+      underscoredAll: true,
+    },
+  };
+
+
+}
+
+Migrations {
+  commands {
+    //criar tabela
+    yarn sequelize migration:create --name=create-users
+
+    //adicionar tabela na db
+    yarn sequelize db:migration
+    yarn sequelize db:migration:undo
+    yarn sequelize db:migration:undo:all
+}
